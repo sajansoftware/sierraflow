@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SierraFlow — AI Agents for Financial Services</title>
+    <meta name="description" content="SierraFlow builds AI agents that automate workflows for financial services firms. Client onboarding, lead qualification, and operational automation — built by finance professionals.">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0b1121;
+            --bg-secondary: #131c31;
+            --bg-card: #172033;
+            --border: #1e2d4a;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-glow: rgba(59, 130, 246, 0.15);
+            --gradient-start: #3b82f6;
+            --gradient-end: #8b5cf6;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- NAV ---- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1rem 2rem;
+            background: rgba(11, 17, 33, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-logo span {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* ---- HERO ---- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            max-width: 800px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 560px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            padding: 0.8rem 2rem;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            padding: 0.8rem 2rem;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-muted);
+            color: var(--text-primary);
+        }
+
+        /* ---- SECTIONS ---- */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        /* ---- SERVICES ---- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: border-color 0.3s, transform 0.2s;
+        }
+
+        .service-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-glow);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .service-card ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .service-card ul li {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            padding: 0.3rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+
+        .service-card ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.7rem;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        /* ---- ABOUT ---- */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .about-text strong {
+            color: var(--text-primary);
+        }
+
+        .credentials {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .credential {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .credential .role {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .credential .org {
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        .credential .desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+
+        /* ---- PROJECTS ---- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: border-color 0.3s, transform 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .project-tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: var(--accent-glow);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .project-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.7;
+        }
+
+        .project-tech {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1.25rem;
+        }
+
+        .tech-pill {
+            padding: 0.2rem 0.6rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ---- CTA ---- */
+        .cta-section {
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ---- FOOTER ---- */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--text-primary);
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 7rem 1.5rem 3rem;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nav -->
+    <nav>
+        <div class="nav-logo"><span>SierraFlow</span></div>
+        <ul class="nav-links">
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            AI Agents for Financial Services
+        </div>
+        <h1>Your operations,<br><span class="gradient">on autopilot.</span></h1>
+        <p>SierraFlow builds AI agents that automate client onboarding, lead qualification, and operational workflows for financial services firms. Built by finance professionals, not just engineers.</p>
+        <div class="hero-cta">
+            <a href="#contact" class="btn-primary">Book a Discovery Call</a>
+            <a href="#projects" class="btn-secondary">See Our Work</a>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services">
+        <p class="section-label">Services</p>
+        <h2 class="section-title">AI agents that become infrastructure.</h2>
+        <p class="section-subtitle">We don't build tools you'll forget about. We build agents that run critical workflows daily, so your team can focus on clients.</p>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">&#x2699;</div>
+                <h3>Client Onboarding Agent</h3>
+                <p>Automate intake forms, document collection, KYC checklists, CRM population, and welcome sequences. Cut onboarding time from hours to minutes.</p>
+                <ul>
+                    <li>Automated document collection &amp; verification</li>
+                    <li>CRM auto-population from intake data</li>
+                    <li>Compliance-ready KYC/AML checklist generation</li>
+                    <li>Personalized welcome sequence triggers</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#x26A1;</div>
+                <h3>Lead Qualification Agent</h3>
+                <p>Respond to inbound leads in minutes, not days. Qualify prospects automatically, score them by fit, and book the right ones onto your calendar.</p>
+                <ul>
+                    <li>Instant response to website &amp; form inquiries</li>
+                    <li>Automated qualification questions (AUM, goals, timeline)</li>
+                    <li>Lead scoring &amp; prioritization</li>
+                    <li>Direct calendar booking for qualified prospects</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#x1F4CA;</div>
+                <h3>Custom Workflow Automation</h3>
+                <p>Have a repetitive process burning your team's hours? We'll scope it, build an agent, and embed it into your existing systems.</p>
+                <ul>
+                    <li>Portfolio review prep automation</li>
+                    <li>Compliance reporting workflows</li>
+                    <li>Client communication sequences</li>
+                    <li>Data aggregation &amp; reporting agents</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+        <p class="section-label">Founder</p>
+        <h2 class="section-title">Built from inside the industry.</h2>
+        <p class="section-subtitle">Most AI agencies don't understand your compliance requirements, your client lifecycle, or your regulatory constraints. We do &mdash; because we come from finance.</p>
+
+        <div class="about-content">
+            <div class="about-text">
+                <p><strong>Sajan Goswami</strong> built SierraFlow after seeing firsthand how financial services firms operate &mdash; and where they waste the most time.</p>
+                <p>As a CMBS Analyst at <strong>KBRA (Kroll Bond Rating Agency)</strong>, Sajan worked inside the financial services ecosystem, analyzing commercial mortgage-backed securities and understanding the compliance, data, and operational challenges these firms face daily.</p>
+                <p>That domain expertise, combined with hands-on experience in <strong>agentic AI engineering</strong> and <strong>SEO strategy</strong>, is what makes SierraFlow different. We don't just build AI &mdash; we build AI that understands how financial services actually works.</p>
+            </div>
+            <div class="credentials">
+                <div class="credential">
+                    <div class="role">CMBS Analyst</div>
+                    <div class="org">KBRA (Kroll Bond Rating Agency)</div>
+                    <div class="desc">Commercial mortgage-backed securities analysis, credit rating, financial modeling</div>
+                </div>
+                <div class="credential">
+                    <div class="role">Agentic AI Engineer</div>
+                    <div class="org">Independent</div>
+                    <div class="desc">Building AI agent systems, workflow automation, and autonomous software</div>
+                </div>
+                <div class="credential">
+                    <div class="role">B.S. Business Administration</div>
+                    <div class="org">Drexel University &mdash; LeBow College of Business</div>
+                    <div class="desc">Finance &amp; business strategy</div>
+                </div>
+                <div class="credential">
+                    <div class="role">Army ROTC Cadet</div>
+                    <div class="org">U.S. Army</div>
+                    <div class="desc">Leadership development, organizational strategy, team coordination</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects">
+        <p class="section-label">Projects</p>
+        <h2 class="section-title">What we've built.</h2>
+        <p class="section-subtitle">A sampling of financial services tooling and AI systems built by the SierraFlow team.</p>
+
+        <div class="projects-grid">
+            <a href="https://github.com/sajansoftware/CMBS-Dashboard" target="_blank" rel="noopener" class="project-card">
+                <span class="project-tag">Financial Services</span>
+                <h3>CMBS Analytics Dashboard</h3>
+                <p>Interactive analytics dashboard for commercial mortgage-backed securities data. Built during tenure at KBRA to streamline deal analysis and portfolio review workflows.</p>
+                <div class="project-tech">
+                    <span class="tech-pill">Python</span>
+                    <span class="tech-pill">Streamlit</span>
+                    <span class="tech-pill">Data Analytics</span>
+                </div>
+            </a>
+            <a href="https://github.com/sajansoftware/pawping" target="_blank" rel="noopener" class="project-card">
+                <span class="project-tag">AI Agent</span>
+                <h3>PawPing</h3>
+                <p>AI-powered SMS assistant for veterinary clinics. Automates appointment scheduling, client communication, and follow-up sequences via conversational AI.</p>
+                <div class="project-tech">
+                    <span class="tech-pill">Node.js</span>
+                    <span class="tech-pill">AI / LLM</span>
+                    <span class="tech-pill">SMS Integration</span>
+                </div>
+            </a>
+            <a href="https://github.com/sajansoftware/sierra-trading" target="_blank" rel="noopener" class="project-card">
+                <span class="project-tag">FinTech</span>
+                <h3>Sierra Trading</h3>
+                <p>Multi-sector micro-float stock screener with live financial data via yfinance, company news scraping, and catalyst modal overlays for biotech and tech equities.</p>
+                <div class="project-tech">
+                    <span class="tech-pill">Python</span>
+                    <span class="tech-pill">Streamlit</span>
+                    <span class="tech-pill">yfinance</span>
+                    <span class="tech-pill">Web Scraping</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="contact" class="cta-section">
+        <h2>Let's automate your operations.</h2>
+        <p>Book a 15-minute discovery call. We'll assess your workflows and show you exactly where an AI agent can save your team time.</p>
+        <a href="mailto:sajan@sierraflow.io" class="btn-primary">Get in Touch</a>
+        <div style="margin-top: 1.5rem;">
+            <a href="https://www.linkedin.com/in/sajan-goswami/" target="_blank" rel="noopener" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none;">LinkedIn</a>
+            <span style="color: var(--text-muted); margin: 0 0.75rem;">|</span>
+            <a href="https://github.com/sajansoftware" target="_blank" rel="noopener" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none;">GitHub</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 SierraFlow. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
